@@ -1,8 +1,9 @@
 // components/faq.tsx
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -31,48 +32,113 @@ const faqs = [
   },
 ];
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
+  }),
+};
+
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section id="faq" className="py-24 px-6 max-w-3xl mx-auto">
-      <div className="section-label">FAQ</div>
-      <h2 className="section-title">Common questions</h2>
+    <section
+      id="faq"
+      ref={sectionRef}
+      className="py-24 px-6 max-w-3xl mx-auto relative"
+    >
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.02)_0%,_transparent_70%)] pointer-events-none" />
 
-      <div className="mt-12 space-y-2">
+      <div className="section-label justify-center">FAQ</div>
+      <h2 className="section-title text-center">Common questions</h2>
+
+      <div className="mt-12 space-y-4">
         {faqs.map((faq, idx) => (
-          <div
+          <motion.div
             key={idx}
-            className={`rounded-xl border transition-all ${
-              openIndex === idx ? "border-border" : "border-transparent"
-            }`}
+            custom={idx}
+            variants={itemVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="group"
           >
-            <button
-              onClick={() => toggleFaq(idx)}
-              className="w-full flex justify-between items-center p-5 text-left"
-            >
-              <span className="text-sm font-medium">{faq.question}</span>
-              <Plus
-                size={16}
-                className={`text-text-muted transition-transform ${
-                  openIndex === idx ? "rotate-45" : ""
-                }`}
-              />
-            </button>
-            <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openIndex === idx ? "max-h-40 pb-5" : "max-h-0"
+            <motion.div
+              className={`glass rounded-xl border transition-all duration-300 ${
+                openIndex === idx
+                  ? "border-border-bright bg-white/5 dark:bg-black/20"
+                  : "border-border hover:border-border-bright hover:bg-white/5 dark:hover:bg-black/10"
               }`}
+              layout
             >
-              <p className="text-xs text-text-dim px-5 leading-relaxed">{faq.answer}</p>
-            </div>
-          </div>
+              {/* Question button */}
+              <button
+                onClick={() => toggleFaq(idx)}
+                className="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer group"
+                aria-expanded={openIndex === idx}
+              >
+                <div className="flex items-center gap-3 flex-1">
+                  <HelpCircle
+                    size={16}
+                    className={`text-text-muted transition-all duration-300 ${
+                      openIndex === idx
+                        ? "opacity-100 rotate-0"
+                        : "opacity-40 group-hover:opacity-70"
+                    }`}
+                  />
+                  <span className="text-sm font-medium tracking-tight text-foreground/90">
+                    {faq.question}
+                  </span>
+                </div>
+                <motion.div
+                  animate={{ rotate: openIndex === idx ? 180 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="w-6 h-6 rounded-full glass border border-border flex items-center justify-center"
+                >
+                  <ChevronDown size={14} className="text-text-muted" />
+                </motion.div>
+              </button>
+
+              {/* Answer (animated) */}
+              <AnimatePresence initial={false}>
+                {openIndex === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-5 pb-5 pt-0">
+                      <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
+                      <p className="text-xs text-text-dim leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
+
+      {/* Decorative bottom element */}
+      <motion.div
+        className="w-32 h-px bg-gradient-to-r from-transparent via-border-bright to-transparent mx-auto mt-16"
+        initial={{ scaleX: 0 }}
+        animate={isInView ? { scaleX: 1 } : {}}
+        transition={{ duration: 1, delay: 0.5 }}
+      />
     </section>
   );
 }
