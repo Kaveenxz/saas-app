@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { NoiseOverlay } from "@/components/noice-overlay";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -42,9 +43,9 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <NoiseOverlay />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <LayoutWrapper>
+      {children}
+    </LayoutWrapper>
         </ThemeProvider>
       </body>
     </html>
