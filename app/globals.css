@@ -1,26 +1,321 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================
+   THEME
+========================= */
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-border: hsl(var(--border));
+  --color-border-bright: hsl(var(--border-bright));
+
+  --color-text-dim: hsl(var(--text-dim));
+  --color-text-muted: hsl(var(--text-muted));
+
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-mono: var(--font-mono), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* =========================
+   BASE
+========================= */
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --border: 0 0% 89.8%;
+    --border-bright: 0 0% 85%;
+
+    --text-dim: 0 0% 45%;
+    --text-muted: 0 0% 63%;
+
+    --font-sans: var(--font-geist-sans);
+    --font-serif: "Cormorant Garamond";
+    --font-mono: var(--font-geist-mono);
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --border-bright: 0 0% 20%;
+
+    --text-dim: 0 0% 63.9%;
+    --text-muted: 0 0% 42%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================
+   COMPONENTS
+========================= */
+
+@layer components {
+  .glass {
+    @apply bg-white/5 dark:bg-black/30 backdrop-blur-xl border border-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)];
+  }
+
+  .glass-bright {
+    @apply border-border/80;
+  }
+
+  .section-label {
+    @apply font-mono text-[11px] tracking-[0.1em] text-text-muted uppercase flex items-center gap-2;
+  }
+
+  .section-label::before {
+    content: "";
+    @apply w-5 h-px bg-border;
+  }
+
+  .section-title {
+    @apply font-serif text-4xl md:text-5xl lg:text-6xl font-normal tracking-tighter leading-[1.1] mb-4;
+  }
+
+  .section-sub {
+    @apply text-base text-text-dim max-w-xl leading-relaxed;
+  }
+}
+
+/* =========================
+   UTILITIES
+========================= */
+
+@layer utilities {
+  /* typography */
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+
+  /* colors */
+  .text-text-dim {
+    color: hsl(var(--text-dim));
+  }
+
+  .text-text-muted {
+    color: hsl(var(--text-muted));
+  }
+
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+
+  .border-border-bright {
+    border-color: hsl(var(--border-bright));
+  }
+
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+
+  .bg-foreground {
+    background-color: hsl(var(--foreground));
+  }
+
+  .text-foreground {
+    color: hsl(var(--foreground));
+  }
+
+  .from-background {
+    --tw-gradient-from: hsl(var(--background))
+      var(--tw-gradient-from-position);
+  }
+
+  .to-background {
+    --tw-gradient-to: hsl(var(--background))
+      var(--tw-gradient-to-position);
+  }
+
+  /* layout */
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+
+  @media (min-width: 1400px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+
+  /* glass */
+  .bg-glass {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .backdrop-blur-xl {
+    backdrop-filter: blur(24px);
+  }
+
+  /* =========================
+     ANIMATIONS
+  ========================= */
+
+  @keyframes fadeUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(8px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes floatCard {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  @keyframes floatOrb {
+    0%,
+    100% {
+      transform: translateY(0) translateX(-50%);
+    }
+
+    50% {
+      transform: translateY(-20px) translateX(-50%);
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) both;
+  }
+
+  .animate-float-card {
+    animation: floatCard 8s ease-in-out infinite;
+  }
+
+  .animate-float-orb {
+    animation: floatOrb 10s ease-in-out infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+  }
+
+  /* animation delays */
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-3000 {
+    animation-delay: 3s;
+  }
+
+  .animation-delay-5000 {
+    animation-delay: 5s;
+  }
+
+  /* masks */
+  .mask-fade-edges {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+  }
+}
+
+.dot-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+}
+
+:root {
+  --dot-color: rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --dot-color: rgba(255, 255, 255, 0.12);
+}
+
+.dot-grid {
+  background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
 }
