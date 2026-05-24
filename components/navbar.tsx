@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Menu, X, Moon, Sun, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const navLinks = [
   { name: "Features", href: "#features" },
@@ -130,7 +131,7 @@ export function Navbar() {
               </motion.div>
             </button>
             <button className="relative px-5 py-2 rounded-xl glass border border-border text-text-dim hover:text-foreground transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden group">
-              <span className="relative z-10 text-sm">Sign in</span>
+              <Link href={"/auth"}><span className="relative z-10 text-sm">Sign in</span></Link>
               <span className="absolute inset-0 bg-gradient-to-r from-foreground/0 via-foreground/5 to-foreground/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
             </button>
             <button className="relative px-5 py-2 rounded-xl bg-foreground text-background font-medium text-sm overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95">
@@ -194,7 +195,7 @@ export function Navbar() {
                   {mounted ? (theme === "dark" ? <Sun size={14} /> : <Moon size={14} />) : <div className="w-3.5 h-3.5 rounded-full bg-text-muted/50" />}
                 </button>
                 <button className="flex-1 px-4 py-2 rounded-xl glass border border-border text-text-dim hover:text-foreground transition-all text-sm">
-                  Sign in
+                <Link href={"/auth"}>Sign in</Link>
                 </button>
                 <button className="flex-1 px-4 py-2 rounded-xl bg-foreground text-background font-medium text-sm transition-all hover:opacity-90">
                   Get started
