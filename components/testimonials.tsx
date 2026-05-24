@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, Variants } from "framer-motion";
 import { Quote } from "lucide-react";
 
 const testimonials = [
@@ -51,26 +51,38 @@ const testimonials = [
 ];
 
 // Variants for staggered card entrance
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.2,
+const containerVariants: Variants = {
+    hidden: {
+      opacity: 0,
     },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
+  
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+      },
+    },
+  };
+  
+  const cardVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      scale: 0.96,
+    },
+  
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+  
+      transition: {
+        duration: 0.5,
+        ease: "easeOut" as const,
+      },
+    },
+  };
 
 export function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);

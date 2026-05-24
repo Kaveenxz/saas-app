@@ -49,7 +49,10 @@ export function HowItWorks() {
     navigator.clipboard.writeText(text);
     setCopySuccess(true);
     setTimeout(() => setCopySuccess(false), 2000);
+
+    
   };
+
 
   return (
     <section id="how" ref={sectionRef} className="py-24 px-6 max-w-5xl mx-auto text-center relative overflow-hidden">
@@ -98,7 +101,7 @@ export function HowItWorks() {
               onHoverStart={(e) => {
                 setHoveredStep(idx);
                 // Safety check: ensure currentTarget exists
-                const target = e.currentTarget;
+                const target:any = e.currentTarget;
                 if (target) {
                   const rect = target.getBoundingClientRect();
                   mouseX.set(e.clientX - rect.left);

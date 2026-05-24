@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView, useScroll } from "framer-motion";
+import { motion, useInView, useScroll, Variants } from "framer-motion";
 import { ArrowUp, Sparkles, Send } from "lucide-react";
 
 // Custom social icons (inline SVGs) – avoids missing icons in lucide-react
@@ -61,18 +61,35 @@ const socialLinks = [
   { icon: MailIcon, href: "#", label: "Email" },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-};
+const containerVariants: Variants = {
+    hidden: {
+      opacity: 0,
+    },
+  
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+  
+  const itemVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+  
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut" as const,
+      },
+    },
+  };
 
 export function Footer() {
   const [email, setEmail] = useState("");
